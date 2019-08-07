@@ -12,7 +12,7 @@ class FileParser:
         file = open("../input/events.csv", newline='')
         reader = csv.reader(file)
         next(reader)
-        i = 0
+        i = 1
         for row in reader:
             if(row[2] == 'Both'): 
                 event1 = Event(i, row[0], "Morning", row[1])
@@ -29,30 +29,55 @@ class FileParser:
         for i,row in enumerate(reader):
             team = Team(i+1, row[0])
             self.teams[row[0].lower()] = team
-        # print(self.teams.keys())
     def parse_coaches(self):
         file = open("../input/coaches.csv", newline='')
         reader = csv.reader(file)
+        i = 0
         for row in reader:
             if(row[0] == ''):
                 continue
             team = self.teams[row[0].lower()]
-            coach = Coach(team.get_number(), row[1])
-            for i in range(2, len(row), 2):
+            coach = Coach(team.get_number(), row[1], i)
+            i += 1
+            self.coaches.append(coach)
+            for j in range(2, len(row), 2):
                 # print(row[i].lower())
-                event_list = self.events[row[i].lower()]
-                if row[i+1].lower() == "no":
-                    pair = (int(i/2), coach)
+                event_list = self.events[row[j].lower()]
+                if row[j+1].lower() == "no":
+                    pair = (int(j/2), coach)
                 else:
                     pair = (0, coach)
                 for event in event_list:
                     event.add_potential_coach(pair)
-        # for event_list in self.events.values():
-        #     for event in event_list:
-        #         event.print_info() 
+        for event_list in self.events.values():
+            for event in event_list:
+                event.sort_coaches() 
+    def create_graph(self):
+        graph = []
+        # get number of nodes in graph 
+        event_num = len(self.get_events_as_map().values())
+        coach_num = len(self.get_coaches())
+        row = event_num + coach_num + 2
+        # create empty graph (no edges)
+        for i in range(0, row):
+            graph.append([])
+            for j in range(0, row):
+                graph[i].append(0)
+        # fill in edge weights
+        # edges from source to events
+        for i in range(1, event_num+1):
+            graph[0][i] = self.get_events_as_map()[i].get_num()
+        # edges from events to coaches
+        for i in range(1, event_num+1):
+            for priority,coach in self.get_events_as_map()[i].get_potential_coaches():
+                graph[i][coach.get_id() + event_num] = 1
+        # edges from coaches to sink
+        for i in range(event_num+1, row-1):
+            graph[i][row-1] = 1
+        return graph
     def get_events(self):
         if len(self.events) > 0:
-            return self.events.values
+            return list(self.events.values())
         else:
             print("No events parsed.")
             return None
@@ -70,14 +95,15 @@ class FileParser:
             return None
     def get_teams(self):
         if len(self.teams) > 0:
-            return self.teams.values
+            # print(self.teams.values())
+            return list(self.teams.values())
         else:
-            print("No coaches parsed.")
+            print("No teams parsed.")
             return None
-
 
 if __name__ == "__main__":
     fp = FileParser()
     fp.parse_teams()
     fp.parse_events()
     fp.parse_coaches()
+    fp.create_graph()

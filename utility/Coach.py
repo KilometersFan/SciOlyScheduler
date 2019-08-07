@@ -1,9 +1,10 @@
 class Coach:
-    def __init__(self, team_number, name):
+    def __init__(self, team_number, name,id):
         self.team_number = team_number
         self.name = name
         self.time = None
         self.assigned_event = None
+        self.id = id
     def get_team_number(self):
         return self.team_number
     def get_name(self):
@@ -21,7 +22,8 @@ class Coach:
             print("Invalid argument passed. Looking for int!")
     def has_assigned_event(self):
         return self.assigned_event != None
-
+    def get_id(self):
+        return self.id
     def print_info(self):
         print("Coach", self.name, "for Team", self.team_number)
         if self.has_assigned_event():
