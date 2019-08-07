@@ -1,1 +1,3 @@
-/utility/pycache
+__pycache__/
+*.py[cod]
+*$py.class

@@ -56,6 +56,12 @@ class FileParser:
         else:
             print("No events parsed.")
             return None
+    def get_events_as_map(self):
+        event_map = {}
+        for value in self.events.values():
+            for event in value:
+                event_map[event.get_id()] = event
+        return event_map
     def get_coaches(self):
         if len(self.coaches) > 0:
             return self.coaches
