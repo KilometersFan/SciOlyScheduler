@@ -56,7 +56,6 @@ class FileParser:
         for event_list in self.events.values():
             for event in event_list:
                 event.sort_coaches()
-                # event.print_info()
         file.close()
     def create_graph(self):
         graph = []

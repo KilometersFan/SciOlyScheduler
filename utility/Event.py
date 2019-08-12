@@ -24,6 +24,8 @@ class Event:
             self.assigned_coaches.append(coach)
         else:
             print("Invalid argument passed. Looking for Coach!")
+    def has_coaches(self):
+        return self.num == len(self.assigned_coaches)
     def add_potential_coach(self, coach_priority_pair):
         if(isinstance(coach_priority_pair, tuple) and isinstance(coach_priority_pair[0], int) and isinstance(coach_priority_pair[1], Coach)):
             self.potential_coaches.append(coach_priority_pair)
@@ -56,24 +58,26 @@ class Event:
         print()
     def __lt__(self, other):
         # prioritizes those with coaches who have done it before
-        if(self.num_zero_priority != other.num_zero_priority):
-            if(self.num_zero_priority > 0 and other.num_zero_priority == 0):
-                return True
-            elif(self.num_zero_priority == 0 and other.num_zero_priority > 0):
-                return False
-            else:
-                return self.num_zero_priority < other.num_zero_priority 
-        else:
-            return self.num_coaches < other.num_coaches
-        # prioritizes events with less coaches who are interested
-        # if(self.num_coaches < other.num_coaches):
-        #     return True
-        # elif(self.num_coaches > other.num_coaches):
-        #     return False
-        # else:
+        
+        # if(self.num_zero_priority != other.num_zero_priority):
         #     if(self.num_zero_priority > 0 and other.num_zero_priority == 0):
         #         return True
         #     elif(self.num_zero_priority == 0 and other.num_zero_priority > 0):
         #         return False
         #     else:
-        #         return self.num_zero_priority < other.num_zero_priority
+        #         return self.num_zero_priority < other.num_zero_priority 
+        # else:
+        #     return self.num_coaches < other.num_coaches
+        # prioritizes events with less coaches who are interested
+        
+        if(self.num_coaches < other.num_coaches):
+            return True
+        elif(self.num_coaches > other.num_coaches):
+            return False
+        else:
+            if(self.num_zero_priority > 0 and other.num_zero_priority == 0):
+                return True
+            elif(self.num_zero_priority == 0 and other.num_zero_priority > 0):
+                return False
+            else:
+                return self.num_zero_priority < other.num_zero_priority

@@ -11,9 +11,10 @@ class Scheduler:
         self.file_parser.parse_coaches()
         self.teams = self.file_parser.get_teams()
         self.events = self.file_parser.get_events_as_map()
-        self.coaches= self.file_parser.get_coaches_as_map()
+        self.events_remaining = list(self.events.keys())
+        self.coaches = self.file_parser.get_coaches_as_map()
+        self.coaches_remaining = list(self.coaches.keys())
         self.graph = self.file_parser.create_graph()
-        print(self.graph[0])
     def get_teams(self):
         return self.teams
     def get_events(self):
@@ -27,7 +28,7 @@ class Scheduler:
         return event_list
     def get_coaches(self):
         return self.coaches
-    def BFS(self, parent): 
+    def bfs(self, parent): 
         # Mark all the vertices as not visited 
         visited =[False]*(len(self.graph)) 
         # Create a queue for BFS 
@@ -49,7 +50,7 @@ class Scheduler:
                     if visited[event.get_id()] == False and self.graph[u][event.get_id()] > 0 and event.get_num() != len(event.get_coaches()) and len(event.get_potential_coaches()) > 0: 
                         queue.append(event.get_id()) 
                         visited[event.get_id()] = True
-                        parent[event.get_id()] = u 
+                        parent[event.get_id()] = u
             # only checks sink, used for the edges connecting coach to sink (since coach nodes only have edges to the sink in this graph)
             elif(u >= len(self.events)+1 and u <= len(self.events) + len(self.coaches)):
                 if visited[t] == False and self.graph[u][t] > 0 :
@@ -80,14 +81,15 @@ class Scheduler:
         # If we reached sink in BFS starting from source, then return 
         # true, else false 
         return True if visited[t] else False
-    def FordFulkerson(self): 
+    def ford_fulkerson(self): 
         # This array is filled by BFS and to store path 
         source = 0
         sink = len(self.events.values()) + len(self.coaches) + 1
         parent = [-1]*(len(self.graph)) 
         max_flow = 0
         # Augment the flow while there is path from source to sink 
-        while self.BFS(parent) : 
+        while self.bfs(parent) : 
+            
             # Find minimum residual capacity of the edges along the 
             # path filled by BFS. Or we can say find the maximum flow 
             # through the path found. 
@@ -111,20 +113,37 @@ class Scheduler:
                     self.coaches[v].set_event(u)
                     self.coaches[v].set_time(self.events[u].get_time())
                     self.events[u].add_coach(self.coaches[v])
+                    if u in self.events_remaining and self.events[u].get_num() == len(self.events[u].assigned_coaches):
+                        self.events_remaining.remove(u)
+                    self.coaches_remaining.remove(v)
                     for pair in self.events[u].potential_coaches:
                         if pair[1].get_id() == self.coaches[v].get_id() or any(teammate.get_time() == self.events[u].get_time() for teammate in self.teams[pair[1].get_team_number()-1].get_teammate(pair[1])):
                             self.events[u].potential_coaches.remove(pair)
                 v = parent[v]
         return max_flow
-                
+    def fill_remaining(self):
+        for id in self.events_remaining:
+            while not self.events[id].has_coaches():
+                potential_coach = self.find_match(self.events[id])
+                if potential_coach:
+                    self.events[id].add_coach(self.coaches[potential_coach])
+                    self.coaches[potential_coach].set_event(id)
+                    self.coaches[potential_coach].set_time(self.events[id].get_time())
+                    self.coaches_remaining.remove(potential_coach)
+                else:
+                    print("No coaches can be asisgned to this event!")
+                    break
+    def find_match(self, event):
+        for id in self.coaches_remaining:
+            teammates = self.teams[self.coaches[id].get_team_number()-1].get_teammate(self.coaches[id])
+            if not any(teammate.get_time() == event.get_time() for teammate in teammates):
+                return id
+        return None
 if __name__ == "__main__":
     s = Scheduler()
-    # for event in s.get_events_list():
-    #     event.print_info()
-    print(s.FordFulkerson())
-    print(s.graph[3])
-    events = s.get_events()
-    for event in events.values():
+    print("Coaches assigned to a preferred event: ",s.ford_fulkerson())
+    s.fill_remaining()
+    for event in s.events.values():
         event.print_info()
-    for team in s.get_teams():
-        team.print_info()
+    # for team in s.get_teams():
+    #     team.print_info()
