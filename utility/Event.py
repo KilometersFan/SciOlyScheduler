@@ -5,7 +5,7 @@ class Event:
         self.name = name
         self.time = time
         self.num = int(num_coaches)
-        self.assigned_coach = None
+        self.assigned_coaches = []
         self.potential_coaches = []
         self.num_coaches = 0
         self.num_zero_priority = 0
@@ -17,11 +17,11 @@ class Event:
         return self.num
     def get_id(self):
         return self.id
-    def get_coach(self):
-        return self.assigned_coach
-    def set_coach(self, coach):
+    def get_coaches(self):
+        return self.assigned_coaches
+    def add_coach(self, coach):
         if isinstance(coach, Coach):
-            self.assigned_coach = coach
+            self.assigned_coaches.append(coach)
         else:
             print("Invalid argument passed. Looking for Coach!")
     def add_potential_coach(self, coach_priority_pair):
@@ -39,14 +39,23 @@ class Event:
     def print_info(self):
         print("Event:",self.get_name(), "ID:", self.get_id())
         print(self.get_time(), "shift")
-        if self.assigned_coach is None:
+        print("Coach number:",self.get_num())
+        if len(self.assigned_coaches) != self.num:
+            print("Assigned Coaches: ")
+            for coach in self.assigned_coaches:
+                print(coach.get_name())
             print("Potential Coaches:")
             for coach_tuple in self.potential_coaches:
-                print("Coach: ", coach_tuple[1].get_name(), "ID: ", coach_tuple[1].get_id(), ", Priority: ", coach_tuple[0])
+                if(not coach_tuple[1].has_assigned_event()):
+                    print("Coach: ", coach_tuple[1].get_name(), "ID: ", coach_tuple[1].get_id(), ", Priority: ", coach_tuple[0])
+
         else:
-            print("Assigned Coach: ", self.assigned_coach)
+            print("Assigned Coaches: ")
+            for coach in self.assigned_coaches:
+                print(coach.get_name())
         print()
     def __lt__(self, other):
+        # prioritizes those with coaches who have done it before
         if(self.num_zero_priority != other.num_zero_priority):
             if(self.num_zero_priority > 0 and other.num_zero_priority == 0):
                 return True
@@ -56,3 +65,15 @@ class Event:
                 return self.num_zero_priority < other.num_zero_priority 
         else:
             return self.num_coaches < other.num_coaches
+        # prioritizes events with less coaches who are interested
+        # if(self.num_coaches < other.num_coaches):
+        #     return True
+        # elif(self.num_coaches > other.num_coaches):
+        #     return False
+        # else:
+        #     if(self.num_zero_priority > 0 and other.num_zero_priority == 0):
+        #         return True
+        #     elif(self.num_zero_priority == 0 and other.num_zero_priority > 0):
+        #         return False
+        #     else:
+        #         return self.num_zero_priority < other.num_zero_priority

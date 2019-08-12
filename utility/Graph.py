@@ -25,13 +25,13 @@ class Graph:
 		
 		# Standard BFS Loop 
 		while queue: 
-
 			#Dequeue a vertex from queue and print it 
 			u = queue.pop(0) 
-		
 			# Get all adjacent vertices of the dequeued vertex u 
 			# If a adjacent has not been visited, then mark it 
 			# visited and enqueue it 
+
+			# TODO change this, iterate over potential coaches by priority in asc
 			for ind, val in enumerate(self.graph[u]): 
 				if visited[ind] == False and val > 0 : 
 					queue.append(ind) 
@@ -42,7 +42,7 @@ class Graph:
 		# true, else false 
 		return True if visited[t] else False
 			
-	
+	# handles assignment of coaches to events and vice versa
 	# Returns tne maximum flow from s to t in the given graph 
 	def FordFulkerson(self, source, sink): 
 
@@ -77,20 +77,20 @@ class Graph:
 
 		return max_flow 
 
+if __name__ == "__main__":
+	# Create a graph given in the above diagram 
 
-# Create a graph given in the above diagram 
+	graph = [[0, 16, 12, 0, 0, 0], 
+			[0, 0, 1, 12, 0, 0], 
+			[0, 4, 0, 0, 1, 0], 
+			[0, 0, 9, 0, 0, 20], 
+			[0, 0, 0, 1, 0, 4], 
+			[0, 0, 0, 0, 0, 0]] 
 
-graph = [[0, 16, 12, 0, 0, 0], 
-		[0, 0, 1, 12, 0, 0], 
-		[0, 4, 0, 0, 1, 0], 
-		[0, 0, 9, 0, 0, 20], 
-		[0, 0, 0, 1, 0, 4], 
-		[0, 0, 0, 0, 0, 0]] 
+	g = Graph(graph) 
 
-g = Graph(graph) 
+	source = 0; sink = 5
 
-source = 0; sink = 5
+	print ("The maximum possible flow is %d " % g.FordFulkerson(source, sink)) 
 
-print ("The maximum possible flow is %d " % g.FordFulkerson(source, sink)) 
-
-#This code is contributed by Neelam Yadav 
+	#This code is contributed by Neelam Yadav 

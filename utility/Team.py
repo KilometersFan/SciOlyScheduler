@@ -22,20 +22,13 @@ class Team:
         return self.name
     def print_info(self):
         print("Team", self.get_number(), ":", self.get_name())
-        coach_names = []
-        s = ", "
-        for coach in self.get_coaches():
-            if coach is not None:
-                coach_names.append(coach.get_name())
-        if len(coach_names) != 0:
-            print("Team Coaches: ", s.join(coach_names))
+        print("Coaches:")
+        if len(self.get_coaches()) > 0:
+            for coach in self.get_coaches():
+                print(coach.get_name(), coach.get_time(), "shift")
         else: 
             print("No Coaches")
+        print()
 
 if __name__ == "__main__":
-    sample_team = Team(3, "Test")
-    coach1 = Coach(1, "M")
-    coach2 = Coach(1, "P")
-    sample_team.add_coach(coach1)
-    sample_team.add_coach(coach2)
-    sample_team.print_info()
+    pass
