@@ -67,27 +67,29 @@ class Event:
                 print(coach.get_name())
         print()
     def __lt__(self, other):
-        # prioritizes those with coaches who have done it before
-        
-        # if(self.num_zero_priority != other.num_zero_priority):
-        #     if(self.num_zero_priority > 0 and other.num_zero_priority == 0):
-        #         return True
-        #     elif(self.num_zero_priority == 0 and other.num_zero_priority > 0):
-        #         return False
-        #     else:
-        #         return self.num_zero_priority < other.num_zero_priority 
-        # else:
-        #     return self.num_coaches < other.num_coaches
-        # prioritizes events with less coaches who are interested
-        
-        if(self.num_coaches < other.num_coaches):
-            return True
-        elif(self.num_coaches > other.num_coaches):
-            return False
-        else:
+        # uncomment the sorting type you want to use
+        # Note: I've found that the first option returns less matches than the second
+
+        # prioritizes events with coaches who have done it before and events with less potential coaches in the case of ties
+        if(self.num_zero_priority != other.num_zero_priority):
             if(self.num_zero_priority > 0 and other.num_zero_priority == 0):
                 return True
             elif(self.num_zero_priority == 0 and other.num_zero_priority > 0):
                 return False
             else:
-                return self.num_zero_priority < other.num_zero_priority
+                return self.num_zero_priority < other.num_zero_priority 
+        else:
+            return self.num_coaches < other.num_coaches
+
+        # prioritizes events with less coaches and events with less coaches who've proctored them in the past in the case of ties 
+        # if(self.num_coaches < other.num_coaches):
+        #     return True
+        # elif(self.num_coaches > other.num_coaches):
+        #     return False
+        # else:
+        #     if(self.num_zero_priority > 0 and other.num_zero_priority == 0):
+        #         return True
+        #     elif(self.num_zero_priority == 0 and other.num_zero_priority > 0):
+        #         return False
+        #     else:
+        #         return self.num_zero_priority < other.num_zero_priority

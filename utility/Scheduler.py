@@ -88,8 +88,7 @@ class Scheduler:
         parent = [-1]*(len(self.graph)) 
         max_flow = 0
         # Augment the flow while there is path from source to sink 
-        while self.dfs(parent) : 
-            
+        while self.dfs(parent):
             # Find minimum residual capacity of the edges along the 
             # path filled by BFS. Or we can say find the maximum flow 
             # through the path found. 
@@ -98,7 +97,6 @@ class Scheduler:
             while(s != source): 
                 path_flow = min (path_flow, self.graph[parent[s]][s]) 
                 s = parent[s] 
-            # TODO assign event to coach and vice versa
             # Add path flow to overall flow 
             max_flow += path_flow
             # update residual capacities of the edges and reverse edges 
@@ -142,7 +140,9 @@ if __name__ == "__main__":
     s = Scheduler()
     print("Coaches assigned to a preferred event: ",s.ford_fulkerson())
     s.fill_remaining()
-    # for event in s.events.values():
-    #     event.print_info()
+    for event in s.events.values():
+        event.print_info()
     for team in s.get_teams():
         team.print_info()
+    for coach in s.coaches_remaining:
+        print(s.coaches[coach].get_name())
