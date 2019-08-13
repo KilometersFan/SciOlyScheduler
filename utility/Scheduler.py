@@ -117,6 +117,7 @@ class Scheduler:
                         self.events_remaining.remove(u)
                     self.coaches_remaining.remove(v)
                     self.events[u].potential_coaches = [pair for pair in self.events[u].potential_coaches if pair[1].get_id() != self.coaches[v].get_id() and not any(teammate.get_time() == self.events[u].get_time() for teammate in self.teams[pair[1].get_team_number()-1].get_teammate(pair[1])) and not pair[1].has_assigned_event()]         
+                    self.events[u].reset_attributes()
                 v = parent[v]
         return max_flow
     def fill_remaining(self):
@@ -141,7 +142,7 @@ if __name__ == "__main__":
     s = Scheduler()
     print("Coaches assigned to a preferred event: ",s.ford_fulkerson())
     s.fill_remaining()
-    for event in s.events.values():
-        event.print_info()
-    # for team in s.get_teams():
-    #     team.print_info()
+    # for event in s.events.values():
+    #     event.print_info()
+    for team in s.get_teams():
+        team.print_info()

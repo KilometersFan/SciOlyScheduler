@@ -36,6 +36,16 @@ class Event:
             print("Invalid argument passed.")
     def get_potential_coaches(self):
         return self.potential_coaches
+    def reset_attributes(self):
+        new_num = 0
+        new_zero = 0
+        for pair in self.potential_coaches:
+            new_num += 1
+            if pair[0] == 0:
+                new_zero += 1
+        self.num_coaches = new_num
+        self.num_zero_priority = new_zero
+        # print("Num coaches", self.num_coaches, "Num zero", self.num_zero_priority)
     def sort_coaches(self):
         self.potential_coaches = sorted(self.potential_coaches, key=lambda x: x[0])
     def print_info(self):
