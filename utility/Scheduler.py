@@ -21,14 +21,14 @@ class Scheduler:
         return self.events
     def get_events_list(self):
         event_list = list(self.events.values())
-        event_list.sort()
+        event_list.sort(reverse=True)
         # for event in event_list:
         #     print(str(event.get_id()), str(event.num_coaches))
         # print()
         return event_list
     def get_coaches(self):
         return self.coaches
-    def bfs(self, parent): 
+    def dfs(self, parent): 
         # Mark all the vertices as not visited 
         visited =[False]*(len(self.graph)) 
         # Create a queue for BFS 
@@ -40,7 +40,7 @@ class Scheduler:
         visited[s] = True
         # Standard BFS 
         while queue: 
-            u = queue.pop(0) 
+            u = queue.pop() 
             # Get all adjacent vertices of the dequeued vertex u 
             # If a adjacent has not been visited, then mark it 
             # visited and enqueue it             
@@ -88,7 +88,7 @@ class Scheduler:
         parent = [-1]*(len(self.graph)) 
         max_flow = 0
         # Augment the flow while there is path from source to sink 
-        while self.bfs(parent) : 
+        while self.dfs(parent) : 
             
             # Find minimum residual capacity of the edges along the 
             # path filled by BFS. Or we can say find the maximum flow 
@@ -116,9 +116,7 @@ class Scheduler:
                     if u in self.events_remaining and self.events[u].get_num() == len(self.events[u].assigned_coaches):
                         self.events_remaining.remove(u)
                     self.coaches_remaining.remove(v)
-                    for pair in self.events[u].potential_coaches:
-                        if pair[1].get_id() == self.coaches[v].get_id() or any(teammate.get_time() == self.events[u].get_time() for teammate in self.teams[pair[1].get_team_number()-1].get_teammate(pair[1])):
-                            self.events[u].potential_coaches.remove(pair)
+                    self.events[u].potential_coaches = [pair for pair in self.events[u].potential_coaches if pair[1].get_id() != self.coaches[v].get_id() and not any(teammate.get_time() == self.events[u].get_time() for teammate in self.teams[pair[1].get_team_number()-1].get_teammate(pair[1])) and not pair[1].has_assigned_event()]         
                 v = parent[v]
         return max_flow
     def fill_remaining(self):
@@ -131,7 +129,7 @@ class Scheduler:
                     self.coaches[potential_coach].set_time(self.events[id].get_time())
                     self.coaches_remaining.remove(potential_coach)
                 else:
-                    print("No coaches can be asisgned to this event!")
+                    print("No coaches more can be asisgned to this event!")
                     break
     def find_match(self, event):
         for id in self.coaches_remaining:
