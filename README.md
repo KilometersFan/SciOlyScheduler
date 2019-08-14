@@ -11,6 +11,7 @@ The SciOlyScheduler is a scheduling system for Science Olympiad competitions. Gi
 | Sample HS 2 |
 
 - Download this file as a csv file and title it "teams.csv".
+
 - Create a spreadsheet and fill in the columns with event information like so:
 
 | Event | Proctors | Time |
@@ -28,7 +29,6 @@ The SciOlyScheduler is a scheduling system for Science Olympiad competitions. Gi
 | Sample HS | John Hancock | Chemistry Lab | No | Boomilever | Yes | Towers | No |
 
 - Note that the number of choices are not restricted to 3 (must be >= 1). Also be mindful of spelling errors and make sure that the event and school names match those in the "teams.csv" and "events.csv" files. Download this file as a csv and title it "coaches.csv".
-
 - Move the created csv files into the utility directory of the repository.
 
 ### Instructions 
