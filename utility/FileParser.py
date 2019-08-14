@@ -10,59 +10,56 @@ class FileParser:
         self.teams = {}
         self.total_events = 0
     def parse_events(self):
-        file = open("C:/Users/milop/SciOlyScheduler/SciOlyScheduler/utility/events.csv", 'r', newline='')
-        reader = csv.reader(file)
-        next(reader)
-        i = 1
-        # parse the infomation line by line, fill in the dictionary
-        for row in reader:
-            if(row[2] == 'Both'): 
-                event1 = Event(i, row[0], "Morning", row[1])
-                event2 = Event(i+1, row[0], "Afternoon", row[1])
-                self.events[row[0].lower()] = [event1, event2]
-                i += 1
-            else:
-                event = Event(i, row[0], row[2], row[1])
-                self.events[row[0].lower()] = [event]
-            i += 1
-        self.total_events = i-1
-        file.close()
-    def parse_teams(self):
-        file = open("C:/Users/milop/SciOlyScheduler/SciOlyScheduler/utility/teams.csv",'r', newline='')
-        reader = csv.reader(file)
-        next(reader)
-        # parse the infomation line by line, fill in the dictionary
-        for i,row in enumerate(reader):
-            team = Team(i+1, row[0])
-            self.teams[row[0].lower()] = team
-        file.close()
-    def parse_coaches(self):
-        file = open("C:/Users/milop/SciOlyScheduler/SciOlyScheduler/utility/coaches.csv", 'r', newline='')
-        reader = csv.reader(file)
-        next(reader)
-        i = 1
-        # parse the infomation line by line, fill in the dictionary
-        for row in reader:
-            if(row[0] == ''):
-                continue
-            team = self.teams[row[0].lower()]
-            coach = Coach(team.get_number(), row[1], i+self.total_events)
-            team.add_coach(coach)
-            i += 1
-            self.coaches.append(coach)
-            # creates two copies of the event with the same infomation but with different times (Morning and Afternoon)
-            for j in range(2, len(row), 2):
-                event_list = self.events[row[j].lower()]
-                if row[j+1].lower() == "no":
-                    pair = (int(j/2), coach)
+        with open("C:/Users/milop/SciOlyScheduler/SciOlyScheduler/utility/events.csv", 'r', newline='') as file:
+            reader = csv.reader(file)
+            next(reader)
+            i = 1
+            # parse the infomation line by line, fill in the dictionary
+            for row in reader:
+                if(row[2] == 'Both'): 
+                    event1 = Event(i, row[0], "Morning", row[1])
+                    event2 = Event(i+1, row[0], "Afternoon", row[1])
+                    self.events[row[0].lower()] = [event1, event2]
+                    i += 1
                 else:
-                    pair = (0, coach)
+                    event = Event(i, row[0], row[2], row[1])
+                    self.events[row[0].lower()] = [event]
+                i += 1
+            self.total_events = i-1
+    def parse_teams(self):
+        with open("C:/Users/milop/SciOlyScheduler/SciOlyScheduler/utility/teams.csv",'r', newline='') as file:
+            reader = csv.reader(file)
+            next(reader)
+            # parse the infomation line by line, fill in the dictionary
+            for i,row in enumerate(reader):
+                team = Team(i+1, row[0])
+                self.teams[row[0].lower()] = team
+    def parse_coaches(self):
+        with open("C:/Users/milop/SciOlyScheduler/SciOlyScheduler/utility/coaches.csv", 'r', newline='') as file:
+            reader = csv.reader(file)
+            next(reader)
+            i = 1
+            # parse the infomation line by line, fill in the dictionary
+            for row in reader:
+                if(row[0] == ''):
+                    continue
+                team = self.teams[row[0].lower()]
+                coach = Coach(team.get_number(), row[1], i+self.total_events)
+                team.add_coach(coach)
+                i += 1
+                self.coaches.append(coach)
+                # creates two copies of the event with the same infomation but with different times (Morning and Afternoon)
+                for j in range(2, len(row), 2):
+                    event_list = self.events[row[j].lower()]
+                    if row[j+1].lower() == "no":
+                        pair = (int(j/2), coach)
+                    else:
+                        pair = (0, coach)
+                    for event in event_list:
+                        event.add_potential_coach(pair)
+            for event_list in self.events.values():
                 for event in event_list:
-                    event.add_potential_coach(pair)
-        for event_list in self.events.values():
-            for event in event_list:
-                event.sort_coaches()
-        file.close()
+                    event.sort_coaches()
     def create_graph(self):
         graph = []
         # get number of nodes in graph 
