@@ -136,13 +136,18 @@ class Scheduler:
             if not any(teammate.get_time() == event.get_time() for teammate in teammates):
                 return id
         return None
+    def print_info(self):
+        print("Event Information")
+        for event in self.events.values():
+            event.print_info()
+        print("Excess Coaches:")
+        for coach in self.coaches_remaining:
+            print(self.coaches[coach].get_name())
+        print("Team Information")
+        for team in self.get_teams():
+            team.print_info()
 if __name__ == "__main__":
     s = Scheduler()
     print("Coaches assigned to a preferred event: ",s.ford_fulkerson())
     s.fill_remaining()
-    for event in s.events.values():
-        event.print_info()
-    for team in s.get_teams():
-        team.print_info()
-    for coach in s.coaches_remaining:
-        print(s.coaches[coach].get_name())
+    s.print_info()
