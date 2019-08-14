@@ -20,7 +20,7 @@ The SciOlyScheduler is a scheduling system for Science Olympiad competitions. Gi
 | Boomilever | 1 | Afternoon |
 | Chemistry Lab | 2 | Both |
 
-- Be mindful of spelling errors when entering in values and note that "Both" means the event occurs in the morning and afternoon. 
+- Be mindful of spelling errors when entering in values and note that "Both" means the event occurs in the morning and afternoon. Also, the "Proctors" value should be the number of coaches assigned to each time shift. In the above example, Chemistry Lab will have a total of 4 proctors since it is run in both the morning and afternoon, but the value entered in the spreadsheet should be 2 because each shift has 2 coaches. 
 4. Download this file as a csv and title it "events.csv".
 
 5. Create a spreadsheet and fill in the columns with coach information like so:
