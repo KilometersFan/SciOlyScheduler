@@ -31,6 +31,7 @@ The SciOlyScheduler is a scheduling system for Science Olympiad competitions. Gi
 
 - Note: The number of choices are not restricted to 3 (at least 1). 
 5. Download this file as a csv and title it "coaches.csv".
+
 6. Move the created csv files into the utility directory of the repository.
 
 - Note: A lot of the following should be automated using Google Forms or similar software because the initialization of the program is dependent on spelling-sensitive file parsing. This program will <b>not</b> work properly if spelling is not checked. For instance, if an event is labeled "Chemistry Lab" in "events.csv" but a coach lists "Chem Lab" as one of their preferred events, the program will not recognize the coach's preference as a valid event.
