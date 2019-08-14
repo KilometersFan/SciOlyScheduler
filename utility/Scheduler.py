@@ -22,9 +22,6 @@ class Scheduler:
     def get_events_list(self):
         event_list = list(self.events.values())
         event_list.sort(reverse=True)
-        # for event in event_list:
-        #     print(str(event.get_id()), str(event.num_coaches))
-        # print()
         return event_list
     def get_coaches(self):
         return self.coaches  

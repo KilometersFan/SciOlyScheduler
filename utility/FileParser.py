@@ -108,7 +108,6 @@ class FileParser:
         return coach_map
     def get_teams(self):
         if len(self.teams) > 0:
-            # print(self.teams.values())
             return list(self.teams.values())
         else:
             print("No teams parsed.")

@@ -45,7 +45,6 @@ class Event:
                 new_zero += 1
         self.num_coaches = new_num
         self.num_zero_priority = new_zero
-        # print("Num coaches", self.num_coaches, "Num zero", self.num_zero_priority)
     def sort_coaches(self):
         self.potential_coaches = sorted(self.potential_coaches, key=lambda x: x[0])
     def print_info(self):
