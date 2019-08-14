@@ -29,7 +29,7 @@ class Coach:
         if self.has_assigned_event():
             print("Proctor for event", self.assigned_event)
             if self.get_time() is not None:
-                print(self.get_time, "shift")
+                print(self.get_time(), "shift")
         else:
             print("Does not proctor an event")
     

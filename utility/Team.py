@@ -25,7 +25,8 @@ class Team:
         print("Coaches:")
         if len(self.get_coaches()) > 0:
             for coach in self.get_coaches():
-                print(coach.get_name(), coach.get_time(), "shift")
+                coach.print_info()
+                print()
         else: 
             print("No Coaches")
         print()

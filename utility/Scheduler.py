@@ -143,6 +143,7 @@ class Scheduler:
         print("Excess Coaches:")
         for coach in self.coaches_remaining:
             print(self.coaches[coach].get_name())
+        print()
         print("Team Information")
         for team in self.get_teams():
             team.print_info()

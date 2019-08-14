@@ -29,6 +29,7 @@ class FileParser:
     def parse_teams(self):
         file = open("C:/Users/milop/SciOlyScheduler/SciOlyScheduler/utility/teams.csv",'r', newline='')
         reader = csv.reader(file)
+        next(reader)
         for i,row in enumerate(reader):
             team = Team(i+1, row[0])
             self.teams[row[0].lower()] = team
@@ -36,6 +37,7 @@ class FileParser:
     def parse_coaches(self):
         file = open("C:/Users/milop/SciOlyScheduler/SciOlyScheduler/utility/coaches.csv", 'r', newline='')
         reader = csv.reader(file)
+        next(reader)
         i = 1
         for row in reader:
             if(row[0] == ''):
