@@ -35,5 +35,5 @@ The SciOlyScheduler is a scheduling system for Science Olympiad competitions. Gi
 - Install the latest version of Python3
 - Clone this repository.
 - Move into the utility directory.
-- Type "python3 Scheduler.py"
+- Type `python3 Scheduler.py`
 - The results will be printed in the console. You will see each event and their assigned coaches, each team and the information of its members, and the coaches who were not assigned to any event. 
