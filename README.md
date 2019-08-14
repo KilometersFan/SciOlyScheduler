@@ -1,6 +1,6 @@
 # SciOlyScheduler
 ## What is this?
-The SciOlyScheduler is a scheduling system for Science Olympiad competitions. Given a list of events and coaches with their preferences, this program will assign coaches to proctor events and optimize the assignments so that events will be proctored by coaches who have proctored them before. Additionally, the program can be changed to maximize assignements solely for assigning coaches to thier preferred events.
+The SciOlyScheduler is a scheduling system for Science Olympiad competitions. Given a list of events and coaches with their preferences, this program will assign coaches to proctor events and optimize the assignments so that events will be proctored by coaches who have proctored them before. Additionally, the program can be changed to maximize assignements solely for assigning coaches to thier preferred events. The program will make sure that no coaches from the same team will be assigned to the same time shift, which ensures that a coach will always be with their students.
 ## How to use
 ### Prerequisites
 - Create a spreadsheet and fill the first column with the participating school names like so:
