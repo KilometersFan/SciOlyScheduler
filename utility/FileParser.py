@@ -14,6 +14,7 @@ class FileParser:
         reader = csv.reader(file)
         next(reader)
         i = 1
+        # parse the infomation line by line, fill in the dictionary
         for row in reader:
             if(row[2] == 'Both'): 
                 event1 = Event(i, row[0], "Morning", row[1])
@@ -30,6 +31,7 @@ class FileParser:
         file = open("C:/Users/milop/SciOlyScheduler/SciOlyScheduler/utility/teams.csv",'r', newline='')
         reader = csv.reader(file)
         next(reader)
+        # parse the infomation line by line, fill in the dictionary
         for i,row in enumerate(reader):
             team = Team(i+1, row[0])
             self.teams[row[0].lower()] = team
@@ -39,6 +41,7 @@ class FileParser:
         reader = csv.reader(file)
         next(reader)
         i = 1
+        # parse the infomation line by line, fill in the dictionary
         for row in reader:
             if(row[0] == ''):
                 continue
@@ -47,6 +50,7 @@ class FileParser:
             team.add_coach(coach)
             i += 1
             self.coaches.append(coach)
+            # creates two copies of the event with the same infomation but with different times (Morning and Afternoon)
             for j in range(2, len(row), 2):
                 event_list = self.events[row[j].lower()]
                 if row[j+1].lower() == "no":

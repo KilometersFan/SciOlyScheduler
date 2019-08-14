@@ -27,7 +27,7 @@ class Scheduler:
         # print()
         return event_list
     def get_coaches(self):
-        return self.coaches
+        return self.coaches  
     def dfs(self, parent): 
         # Mark all the vertices as not visited 
         visited =[False]*(len(self.graph)) 
@@ -38,7 +38,7 @@ class Scheduler:
         # Mark the source node as visited and enqueue it 
         queue.append(s) 
         visited[s] = True
-        # Standard BFS 
+        # Modified DFS 
         while queue: 
             u = queue.pop() 
             # Get all adjacent vertices of the dequeued vertex u 
@@ -78,7 +78,7 @@ class Scheduler:
                             parent[coach.get_id()] = u
                         # otherwise you cannot add the node to the bfs queue because no two coaches of the same team
                         # can be in events with the same time slot (both morning or both afternoon)
-        # If we reached sink in BFS starting from source, then return 
+        # If we reached sink in DFS starting from source, then return 
         # true, else false 
         return True if visited[t] else False
     def ford_fulkerson(self): 
@@ -114,11 +114,13 @@ class Scheduler:
                     if u in self.events_remaining and self.events[u].get_num() == len(self.events[u].assigned_coaches):
                         self.events_remaining.remove(u)
                     self.coaches_remaining.remove(v)
+                    # remove coaches from the events potential coaches, which will affect sorting and improve the outcome
                     self.events[u].potential_coaches = [pair for pair in self.events[u].potential_coaches if pair[1].get_id() != self.coaches[v].get_id() and not any(teammate.get_time() == self.events[u].get_time() for teammate in self.teams[pair[1].get_team_number()-1].get_teammate(pair[1])) and not pair[1].has_assigned_event()]         
                     self.events[u].reset_attributes()
                 v = parent[v]
         return max_flow
     def fill_remaining(self):
+        # loops over remaining events and coaches and matches them up arbitrarily while still making sure no coaches of the same team have the same time shift
         for id in self.events_remaining:
             while not self.events[id].has_coaches():
                 potential_coach = self.find_match(self.events[id])
@@ -131,6 +133,7 @@ class Scheduler:
                     print("No coaches more can be asisgned to this event!")
                     break
     def find_match(self, event):
+        # handles checking if a coach can be assigned to an event based on the time shift of the coach's teammate(s)
         for id in self.coaches_remaining:
             teammates = self.teams[self.coaches[id].get_team_number()-1].get_teammate(self.coaches[id])
             if not any(teammate.get_time() == event.get_time() for teammate in teammates):
